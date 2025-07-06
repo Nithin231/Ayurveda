@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holistic Ayurveda - Book Video Consultations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ayurveda: {
+                            primary: '#4B7F1D',
+                            secondary: '#E8D5A5',
+                            accent: '#A84448',
+                            light: '#F8F4E9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Garamond', serif;
+            background-color: #F8F4E9;
+        }
+        .slot:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .hero-pattern {
+            background-image: url("https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/731ad736-0fe2-4da0-80d5-94a38b9794b2.png");
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero-pattern bg-ayurveda-primary bg-opacity-70 text-white py-12 px-4">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Ayurveda Video Consultations</h1>
+            <p class="text-xl md:text-2xl mb-8">Book your 1-on-1 session with our Ayurveda experts</p>
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b2894733-114b-4579-8c0e-882fe8f7aa59.png" alt="Ayurvedic practitioner holding herbs with golden background" class="mx-auto rounded-lg shadow-lg">
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-ayurveda-primary text-center mb-8">Schedule Your Consultation (5 slots/day)</h2>
+            
+            <div id="booking-container" class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <!-- Calendar Section -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold text-ayurveda-primary mb-4">Select Date</h3>
+                    <div class="grid grid-cols-7 gap-2 mb-4">
+                        <div class="font-bold text-center py-2">Sun</div>
+                        <div class="font-bold text-center py-2">Mon</div>
+                        <div class="font-bold text-center py-2">Tue</div>
+                        <div class="font-bold text-center py-2">Wed</div>
+                        <div class="font-bold text-center py-2">Thu</div>
+                        <div class="font-bold text-center py-2">Fri</div>
+                        <div class="font-bold text-center py-2">Sat</div>
+                    </div>
+                    <div id="calendar" class="grid grid-cols-7 gap-2">
+                        <!-- Calendar will be populated by JS -->
+                    </div>
+                </div>
+                
+                <!-- Available Slots -->
+                <div id="slots-container" class="hidden mb-8">
+                    <h3 class="text-2xl font-semibold text-ayurveda-primary mb-4">Available Slots</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="timeslots">
+                        <!-- Slots will be populated by JS -->
+                    </div>
+                </div>
+                
+                <!-- Patient Information Form -->
+                <form id="patient-form" class="hidden">
+                    <h3 class="text-2xl font-semibold text-ayurveda-primary mb-4">Patient Information</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="name">Full Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ayurveda-primary" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="email">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ayurveda-primary" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="phone">Phone Number (WhatsApp)</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ayurveda-primary" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="concern">Primary Health Concern</label>
+                            <textarea id="concern" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ayurveda-primary"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" id="pay-button" class="mt-6 w-full bg-ayurveda-accent hover:bg-ayurveda-primary text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                        Pay ₹200 to Book Your Slot
+                    </button>
+                </form>
+                
+                <!-- Payment Section -->
+                <div id="payment-section" class="hidden">
+                    <h3 class="text-2xl font-semibold text-ayurveda-primary mb-4">Payment</h3>
+                    <div class="border rounded-lg p-4 mb-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Consultation Fee:</span>
+                            <span>₹200</span>
+                        </div>
+                    </div>
+                    <div id="payment-methods">
+                        <div class="flex items-center mb-2">
+                            <input type="radio" id="upi" name="payment" value="upi" class="mr-2" checked>
+                            <label for="upi">UPI Payment</label>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <input type="radio" id="card" name="payment" value="card" class="mr-2">
+                            <label for="card">Credit/Debit Card</label>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <input type="radio" id="netbanking" name="payment" value="netbanking" class="mr-2">
+                            <label for="netbanking">Net Banking</label>
+                        </div>
+                    </div>
+                    <button type="button" id="confirm-payment" class="w-full bg-ayurveda-accent hover:bg-ayurveda-primary text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                        Confirm Payment
+                    </button>
+                </div>
+                
+                <!-- Confirmation Section -->
+                <div id="confirmation-section" class="hidden text-center">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0f713c23-4434-484e-b63c-5e5f642b35ea.png" alt="Green checkmark with Ayurveda herbs background indicating successful booking" class="mx-auto mb-6">
+                    <h3 class="text-2xl font-semibold text-ayurveda-primary mb-4">Booking Successful!</h3>
+                    <p class="mb-4">Your Ayurveda video consultation is confirmed. Check WhatsApp/SMS for details.</p>
+                    <div id="booking-details" class="mb-6 text-left bg-ayurveda-light p-4 rounded-lg">
+                        <!-- Booking details will be inserted here -->
+                    </div>
+                    <p class="mb-4">We've sent the video call link and details to your WhatsApp/SMS.</p>
+                    <button id="new-booking" class="mt-4 bg-ayurveda-primary hover:bg-ayurveda-accent text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        Book Another Consultation
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-ayurveda-primary text-center mb-8">Our Ayurveda Specialists</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/99440872-b6ec-43da-a7e2-4f1fa15ecd9b.png" alt="Senior Ayurveda doctor holding herbs with warm smile" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-ayurveda-primary mb-2">Dr. Rajesh Patil</h3>
+                        <p class="text-gray-600 mb-2">BAMS, MD (Ayurveda)</p>
+                        <p class="text-gray-700">Specializes in Panchakarma and digestive disorders</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/56ad5218-0123-440d-ba49-3d92ad56ca5c.png" alt="Female Ayurveda practitioner explaining herbal remedies" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-ayurveda-primary mb-2">Dr. Priya Sharma</h3>
+                        <p class="text-gray-600 mb-2">BAMS, Ph.D (Ayurveda)</p>
+                        <p class="text-gray-700">Expert in women's health and hormonal balance</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/209841ad-2396-4e58-81d3-c79614161f11.png" alt="Young Ayurveda doctor demonstrating pulse diagnosis technique" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-ayurveda-primary mb-2">Dr. Amit Desai</h3>
+                        <p class="text-gray-600 mb-2">BAMS, MS (Ayurveda)</p>
+                        <p class="text-gray-700">Specializes in musculoskeletal disorders and yoga therapy</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-ayurveda-primary text-center mb-8">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <div class="text-5xl text-ayurveda-primary font-bold mb-4">1</div>
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a3033cda-a03e-4746-bdff-e2800caad62d.png" alt="Calendar with Ayurveda herbs marking appointment date" class="mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-ayurveda-primary mb-2">Book Your Slot</h3>
+                    <p class="text-gray-700">Choose from available dates and times that suit your schedule</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <div class="text-5xl text-ayurveda-primary font-bold mb-4">2</div>
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/63576ccf-50c3-4c82-ac0d-fe6f49d0a839.png" alt="Secure payment gateway with Ayurveda theme" class="mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-ayurveda-primary mb-2">Secure Payment</h3>
+                    <p class="text-gray-700">Complete the ₹200 payment securely via UPI, card, or net banking</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <div class="text-5xl text-ayurveda-primary font-bold mb-4">3</div>
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/125943cf-7edb-458b-adb7-1878b8a90cd7.png" alt="Video call screen with Ayurveda doctor showing herbs" class="mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-ayurveda-primary mb-2">Consult Online</h3>
+                    <p class="text-gray-700">Receive video call link via WhatsApp/SMS for your consultation</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-ayurveda-primary text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <p class="text-xl font-bold mb-2">Ayurveda Wellness Consultation</p>
+                <p>Bringing Ancient Healing to the Modern World</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <h4 class="font-bold mb-2">Contact</h4>
+                    <p>+91 98765 43210</p>
+                    <p>consult@ayurveda-wellness.com</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">Hours</h4>
+                    <p>Mon-Sat: 9AM - 7PM</p>
+                    <p>Sun: 10AM - 2PM</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">Follow Us</h4>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="hover:text-ayurveda-secondary">Instagram</a>
+                        <a href="#" class="hover:text-ayurveda-secondary">Facebook</a>
+                        <a href="#" class="hover:text-ayurveda-secondary">YouTube</a>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm">© 2024 Ayurveda Wellness Consultation. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Constants
+        const CONSULTATION_FEE = 200;
+        const SLOTS_PER_DAY = 5;
+        const SLOT_DURATION = 60; // minutes
+        
+        // DOM Elements
+        const calendarEl = document.getElementById('calendar');
+        const slotsContainer = document.getElementById('slots-container');
+        const timeslotsEl = document.getElementById('timeslots');
+        const patientForm = document.getElementById('patient-form');
+        const paymentSection = document.getElementById('payment-section');
+        const confirmationSection = document.getElementById('confirmation-section');
+        const bookingDetailsEl = document.getElementById('booking-details');
+        const payButton = document.getElementById('pay-button');
+        const confirmPayment = document.getElementById('confirm-payment');
+        const newBookingButton = document.getElementById('new-booking');
+        
+        // State
+        let selectedDate = null;
+        let selectedSlot = null;
+        let bookingData = {};
+        
+        // Initialize calendar
+        function initCalendar() {
+            // Generate calendar for current month
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            // Get first day of month
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const startingDay = firstDay.getDay();
+            
+            // Get days in month
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Generate empty cells for previous days
+            let calendarHTML = '';
+            for (let i = 0; i < startingDay; i++) {
+                calendarHTML += `<div class="text-center py-2 opacity-50"></div>`;
+            }
+            
+            // Generate days for current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const isPast = date < today && date.getDate() !== today.getDate();
+                const isToday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth();
+                const dayClass = isPast ? 'text-gray-400 cursor-not-allowed' : 
+                                  isToday ? 'bg-ayurveda-primary text-white font-bold' : 'hover:bg-ayurveda-light cursor-pointer';
+                
+                calendarHTML += `
+                    <div class="text-center py-2 rounded-full ${dayClass}" data-date="${day}/${currentMonth + 1}/${currentYear}" ${isPast ? '' : 'onclick="selectDate(this)"'}>
+                        ${day}
+                    </div>
+                `;
+            }
+            
+            calendarEl.innerHTML = calendarHTML;
+        }
+        
+        // Select date handler
+        function selectDate(element) {
+            // Remove selection from all dates
+            document.querySelectorAll('#calendar div').forEach(el => {
+                if (el.classList.contains('bg-ayurveda-primary') && !el.classList.contains('font-bold')) {
+                    el.classList.remove('bg-ayurveda-primary', 'text-white');
+                    el.classList.add('hover:bg-ayurveda-light');
+                }
+            });
+            
+            // Add selection to clicked date
+            element.classList.add('bg-ayurveda-primary', 'text-white');
+            element.classList.remove('hover:bg-ayurveda-light');
+            
+            selectedDate = element.getAttribute('data-date');
+            showAvailableSlots(selectedDate);
+        }
+        
+        // Show available slots for selected date
+        function showAvailableSlots(date) {
+            const [day, month, year] = date.split('/');
+            const formattedDate = `${day}/${month}/${year}`;
+            
+            // Generate 5 slots from 9AM to 5PM with random availability
+            let slotsHTML = '';
+            const startTime = 9; // 9AM
+            const endTime = 17; // 5PM
+            
+            // Calculate available slots (5 slots/day)
+            const slotInterval = Math.floor((endTime - startTime) * 60 / SLOTS_PER_DAY);
+            let availableSlots = [];
+            
+            for (let i = 0; i < SLOTS_PER_DAY; i++) {
+                const slotMinutes = startTime * 60 + i * slotInterval;
+                const hours = Math.floor(slotMinutes / 60);
+                const minutes = slotMinutes % 60;
+                const timeString = `${hours}:${minutes.toString().padStart(2, '0')}`;
+                availableSlots.push(timeString);
+            }
+            
+            // Display available slots
+            availableSlots.forEach((time, index) => {
+                const available = true; // In a real app, this would check against booked slots
+                
+                slotsHTML += `
+                    <div class="slot bg-white border border-ayurveda-secondary rounded-lg p-4 text-center cursor-pointer hover:shadow-md transition-all" onclick="selectSlot('${time}', this)">
+                        <div class="text-lg font-semibold text-ayurveda-primary">${time}</div>
+                        <div class="text-sm ${available ? 'text-green-600' : 'text-red-600'}">
+                            ${available ? 'Available' : 'Booked'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            timeslotsEl.innerHTML = slotsHTML;
+            slotsContainer.classList.remove('hidden');
+            patientForm.classList.add('hidden');
+            paymentSection.classList.add('hidden');
+            confirmationSection.classList.add('hidden');
+        }
+        
+        // Select slot handler
+        function selectSlot(time, element) {
+            // Remove selection from all slots
+            document.querySelectorAll('.slot').forEach(el => {
+                el.classList.remove('border-2', 'border-ayurveda-primary', 'bg-ayurveda-light');
+            });
+            
+            // Add selection to clicked slot
+            element.classList.add('border-2', 'border-ayurveda-primary', 'bg-ayurveda-light');
+            selectedSlot = time;
+            
+            // Show patient form
+            patientForm.classList.remove('hidden');
+        }
+        
+        // Pay button handler
+        payButton.addEventListener('click', function() {
+            // Validate form
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (!name || !email || !phone) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            if (!/^[0-9]{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            // Store booking data
+            bookingData = {
+                name,
+                email,
+                phone,
+                concern: document.getElementById('concern').value,
+                date: selectedDate,
+                time: selectedSlot,
+                fee: CONSULTATION_FEE
+            };
+            
+            // Show payment section
+            paymentSection.classList.remove('hidden');
+            patientForm.classList.add('hidden');
+        });
+        
+        // Confirm Payment handler
+        confirmPayment.addEventListener('click', function() {
+            // In a real app, this would process payment via API
+            
+            // Generate video call URL
+            const videoCallUrl = `https://ayurveda-video-consult.com/${btoa(bookingData.phone + '-' + bookingData.date)}`;
+            
+            // Complete booking
+            completeBooking(videoCallUrl);
+        });
+        
+        // Complete booking
+        function completeBooking(videoCallUrl) {
+            // Store complete booking data
+            bookingData.videoUrl = videoCallUrl;
+            bookingData.bookingId = 'AYV-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            
+            // In a real app, here you would:
+            // 1. Send booking to your backend
+            // 2. Trigger SMS/WhatsApp notifications
+            // 3. Process payment
+            
+            // Display confirmation
+            showConfirmation();
+        }
+        
+        // Show confirmation
+        function showConfirmation() {
+            const formattedDate = new Date(bookingData.date.split('/').reverse().join('-')).toLocaleDateString('en-IN', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            bookingDetailsEl.innerHTML = `
+                <p class="mb-2"><strong>Booking ID:</strong> ${bookingData.bookingId}</p>
+                <p class="mb-2"><strong>Patient:</strong> ${bookingData.name}</p>
+                <p class="mb-2"><strong>Date:</strong> ${formattedDate}</p>
+                <p class="mb-2"><strong>Time:</strong> ${bookingData.time}</p>
+                <p class="mb-2"><strong>Video Call:</strong> <a href="${bookingData.videoUrl}" class="text-ayurveda-accent hover:underline" target="_blank">Click to Join</a></p>
+                <p class="mt-4"><em>A copy of these details has been sent to your WhatsApp/SMS.</em></p>
+            `;
+            
+            paymentSection.classList.add('hidden');
+            confirmationSection.classList.remove('hidden');
+        }
+        
+        // New booking handler
+        newBookingButton.addEventListener('click', function() {
+            // Reset everything
+            selectedDate = null;
+            selectedSlot = null;
+            bookingData = {};
+            
+            // Clear form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('concern').value = '';
+            
+            // Hide all sections except calendar
+            slotsContainer.classList.add('hidden');
+            patientForm.classList.add('hidden');
+            paymentSection.classList.add('hidden');
+            confirmationSection.classList.add('hidden');
+            
+            // Reset selected date UI
+            document.querySelectorAll('#calendar div').forEach(el => {
+                if (el.classList.contains('bg-ayurveda-primary') && !el.classList.contains('font-bold')) {
+                    el.classList.remove('bg-ayurveda-primary', 'text-white');
+                    el.classList.add('hover:bg-ayurveda-light');
+                }
+            });
+        });
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initCalendar();
+            
+            // Global functions
+            window.selectDate = selectDate;
+            window.selectSlot = selectSlot;
+        });
+    </script>
+</body>
+</html>
+
